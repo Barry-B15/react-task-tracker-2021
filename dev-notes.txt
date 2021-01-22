@@ -1,3 +1,9 @@
+Source: https://youtu.be/w7ejDZ8SWv8
+cont@30:45
+impt - to import PropTypes
+rafce - to auto gen func code w/=> func and export file
+shft+; open up emoji 
+
 1. in shell or gitbash: 
     - npm --version   // check node version
     - npx create-react-app react-task-tracker // create the app
@@ -109,3 +115,78 @@ In src,
             }
         }
      save and see the browser update
+
+12. Props:
+    We can pass a title to our Header
+    - We can pass anything we want like so: in App.js
+        <Header title='Hello' />
+    - To retrieve it, 
+        go to the component, inthis case: Header.js 
+        > add the props as a param to the component like so
+
+            const Header = (props) => {
+            }
+    - Replace the static text like so:
+        return (
+            <header>
+                <h1>{props.title}</h1>
+            </header>
+        )
+        save and see the title update in the browser
+
+13. default props;
+    - we can set default props
+    - In App.js we don't pass in anything to <Header />
+        <Header />
+    - we set the props as a param as in 12 above
+        const Header = (props) => {
+            
+        }
+    - add the props to <h1> or whereever
+        return (
+            <header>
+                <h1>{props.title}</h1>
+            </header>
+        )
+    - then below the class, define the default props
+        const Header = (props) => {
+            return (
+            <header>
+                <h1>{props.title}</h1>
+            </header>
+            )
+        }
+        // set default props as an obj
+        Header.defaultProps = {
+            title: 'Task Tracker',
+        }
+
+        export default App
+
+    - Whatever we set in App.js to the <Header />, overrides the defaultProps{}
+        <Header title='Greatest App'/>
+14. Destructure, deconstruct
+    - Instead of 
+        const Header = (props) => {
+            }
+    - We can use {}
+        const Header = ({ title }) => {
+            }
+    - And instead of props.title, 
+        <h1>{props.title}</h1>
+    - we use just title
+        <h1>{ title }</h1>
+
+15. We also have props types
+    - we can do impt to imported propTypes at the top of Header.js which auto imports
+            import PropTypes from 'prop-types'
+    - Then go down below defaultProps to def
+            Header.propTypes = {
+                title: PropTypes.string  // add the type: string, boolean, ---
+            }
+    - with this if we were to add title={1} in App.js, it will still render but will show warning in console since one is an integer not a string.
+    This is a good way to watch for error in codes
+    - if the propType is required, you only need to add .required to the declaration
+            Header.propTypes = {
+                title: PropTypes.string.isRequired, 
+            }
