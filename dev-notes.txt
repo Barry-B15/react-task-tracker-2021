@@ -1,0 +1,111 @@
+1. in shell or gitbash: 
+    - npm --version   // check node version
+    - npx create-react-app react-task-tracker // create the app
+    - cd react-task-tracker // change to the app folder
+    - code .    // open VS code in current folder
+2. In VS code
+    - see all the dirs and files and json packages created with the app
+        react-dom in json package.json is responsible for rendering our app
+        start - will run our dev server
+        build - build the production app for deployment
+        test - for testing
+        eject - handles webpack edits and other libraries and other packages
+    - open Terminal 
+    - npm start     // start the app
+        see the app open, if we click on the react-dev-tool in the extensions, it tells us this app is built on development build
+3. public > index.html 
+    - index.html is the single page of our single page react app (SPA)
+    - remove all the comments, there is just a div with id root. this is what the public sees
+    It is like the gaateway to our react app
+    it displays our root app App.js which is located in our src folder
+4. The src folder is where we put all our components for the app
+    - In index.js we import react, ReactDOM, App.js and other files needed to run our app
+    - it takes our html root file and insert it into an App div which is our App.js that we imported, And App.js is our root component
+    - all the components we make is going to be in this root component - App.js
+5. Change the title in our html file as needed; Task Tracker in this case
+    see it auto reload and update
+6. Open App.js, this is the root component, everything we see comes from here
+    - we see imports logo, and App.css which is some basic design for our app
+    - there is also a function which returns some Javascript Syntax JSX, looks like html but they are JSX and an export
+    - class in react = className, for = htmlFor, ---
+    - For now:
+        delete everything in return() leaving it as
+            <div classname='App'>
+                <h1>Hello from React</h1>
+            </div>
+    - Save an see the update
+    - React returns a single element so everything we want to return must go into this <div> otherwise it wont work
+    - if we dont want to use a <div> we can also use a fragment <> (just angular brackets with nothing inside)
+    - if emmit does not work or to keep our JSX neat, 
+        click the Javascript at the bottom 
+        > search for react 
+        > select React Javascript
+    - We can delete, logo, App.css, App.test.js, setuptest files, we don't need them
+        also delete the imports in App.js
+7. <></> fragment keeps our codes and content wrapped inside the root div
+    - using <div className="App"></div> will wrap all our contents in a div App, inside the root div 
+    - We need a div for styling later so let's have a div container
+        <div classname='container'>
+                <h1>Hello from React</h1>
+        </div>
+
+8. We can define constants and variables outside the return() and call them using {} brackets
+    const name = 'Barry'
+    
+    return (
+        <div classname='container'>
+                <h1>Hello from React</h1>
+                <h2>Hello {name} </h2>
+        </div>
+    )
+9. We can do math : 
+        <h2>Hello {1 + 1} </h2>
+    or use a turnary
+        <h2>Hello {x ? 'Yes" : 'No'} </h2>
+        //(x ? 'Yes") means if X then Yes
+        // (:) means else 'No'
+
+   const x = 'false'
+    
+    return (
+        <div classname='container'>
+                <h1>Hello from React</h1>
+                <h2>Hello {x ? 'Yes" : 'No'} </h2>
+        </div>
+    )
+    Try these and see the results
+
+10. Thing of our UI as a bunch of components, delete the const above let's create our components
+In src, 
+    - create a folder called components. All our components will go here
+    In components, create Header.js (the convention is to start with uppercase)
+    - add ES7 React/Redux?GraphQL/React-Native snippet extension if not already have it
+        it helps auto fill components
+        # rcc will create a class component
+        # rce will create a class component and export it at the bottom
+        # rafce - creates an arrow function, import React and export the function
+    - In Header.js, 
+        type rafce > enter > see a boiler plate of a component created
+        at the top React is also imported, this used to be required in every component before but it's not required anymore so
+        delete it (react imported)
+    - Change the div to
+        <header >
+            <h1>Task Tracker</h1>
+        </header>
+    - Go to App.js to imported it
+        import Header from './components/Header.js
+    - call the Header in the return div and replace former content as
+        <div className="container">
+            <Header />
+        </div> 
+        see the browser update
+11. to use a class base (current one is function based) in our react just as an example 
+    - delete everything
+    - imported React from 'react' at the top
+    - define the class
+        class App extends React.Component {
+            render() {
+                return <h1>Hello From Class</h1>
+            }
+        }
+     save and see the browser update
