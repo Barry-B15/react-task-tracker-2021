@@ -1,4 +1,7 @@
-Source: https://youtu.be/w7ejDZ8SWv8
+Sources:
+Youtube:  https://youtu.be/w7ejDZ8SWv8
+GitHub: https://github.com/bradtraversy/react-crash-2021
+
 cont@30:45
 impt - to import PropTypes
 rafce - to auto gen func code w/=> func and export file
@@ -190,3 +193,130 @@ In src,
             Header.propTypes = {
                 title: PropTypes.string.isRequired, 
             }
+16. styling
+        - we can use a css component 
+        - or add style directly to javascript e.g.
+            <h1 styling={{ color: 'red', backgroundColor: 'black'}} >{title} </h1>
+        Note: to add styling directly in JSX we use double curly {{ }}
+            # also, we use carmel case name - backgroundColor (not background-color)
+        - Another way is to define the const, 
+
+            const headingStyle = {
+                color: 'red', 
+                backgroundColor: 'black'
+            }
+         
+         then use it as needed with a single curly { } 
+            <h1 styling={ headingStyle } >{title} </h1>
+    This does the same as the previous one
+17. Go to index.css (we will be using the component for this project)
+    copy the code @github
+
+18. Lets add a btn with class name 'btn' under our h1 in Header.js
+    also add a className to header so we can style it
+        <header className='header'>
+            <h1>{title}</h1>
+            <button className='btn'>Add</button>
+        </header>
+
+19. We can create a component for almost anything, 
+    if we want to have more btns with diff colors and styles, we can create btns component
+    - create a Button.js component in components dir
+        rafce to auto fill 
+    - delete the react import, it's not required anymore
+    - cut the btn code from Header.js and paste in the return div of Button.js
+    - import the Button to Header.js
+    - then add the Button to <header> under <h1> where we had the btn code before:
+        <header className='header'>
+            <h1>{title}</h1>
+            <Button />
+        </header>
+20. Adding props to Button:
+    - In Header.js, let's add props color and text
+        <Button color='green' text='Hello' />
+    - In Button.js, let's Destructure and add some styles
+
+        const Button = ({ color, text }) => { // destructuring
+        return ( 
+         <button 
+            style={{ backgroundColor: color}} // add style to btn, change static color to dynamic color
+            className='btn'
+         >
+        {text}  // change the static text to text
+         </button>
+    )
+}
+Now see the btn color change to green and the text change to Hello!
+
+21. RESUABLE COMPONENT:
+    if we want to create more btns with diff colors we just add them under the 1st one in Header.js like this:
+
+        return ( 
+        <header className='header'>
+            <h1>{title}</h1>
+            <Button color='green' text='Hello!' />
+            <Button color='blue' text='Hello! 2' />
+            <Button color='green' text='Hello! 3' />
+            <Button color='green' text='Hello! 4' />
+        </header>
+    )
+
+22. Set defaultProps 
+    In Button.js:
+    - defaultProps
+
+        Button.defaultProps = {
+            color: 'steelblue',
+        }
+    - impt to import the propTypes at the top
+    - add the propTypes below the defaultProps
+        Button.propTypes = {
+            text: PropTypes.string,
+            color: PropTypes.string,
+        }
+23. EVENTS:
+    - to add onClick event to our btn, in Button.js;
+     add the event to the btn by setting onClick to a func onClick
+        <button 
+         onClick={onClick}  // 
+         style={{ backgroundColor: color }}
+         className='btn'>{text}
+        </button>
+
+    - then def the func above the return() statement
+        const onClick = () => {
+            console.log('click')
+        }
+    - We can also add the event object
+        const onClick = (e) => {
+            console.log(e)
+        }
+    With this we can get the pos of the element that is clicked, and lot of other things. See in devtool
+    - Since this is a component, it's not always going to have the ssame click
+    so we need to have that click as a prop
+    ##So in Header.js, 
+        # add onClick to the <Button> and set it to {onClick} for now
+            <Button 
+                color='green' 
+                text='Add'
+                onClick={onClick} 
+                />
+        # and def the func above the return() statement
+            const onClick = () => {
+                console.log('Click')
+            }
+        # then catch this prop in Button.js as we did the other props
+            const Button = ( { color, text, onClick }) => {
+                //....
+            }
+        # and delete/remove the old func
+            //const onClick = (e) => {
+            //    console.log(e)
+            //}
+        # then add it to the propTypes
+            Button.propTypes = {
+            text: PropTypes.string,
+            color: PropTypes.string,
+            onClick: PropTypes.func.isRequired (may do without the isRequired)
+            }
+There are many kind of diff events that we can add, onSubmit, onDoubleClick ---
