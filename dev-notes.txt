@@ -449,3 +449,71 @@ There are many kind of diff events that we can add, onSubmit, onDoubleClick ---
     save, we now get our tasks displays
     - to get the day, add
         <p> { task.day } </p>
+
+33. Add a delete btn
+    We can use font awesome cdn to add icons but we will use the react icons for this app. React icon allows us to add various types of icons
+    - open a new Terminal
+    - npm i react-icons
+    - open package.json to see the react-icons added
+    - we can no use icons as components
+34. Add icons
+    - In Task.js, import font awesome icon from react
+        import {FaTimes} from 'react-icons/fa'
+    - To add the icon to h3, do this
+        <h3>
+            {task.text} 
+            <FaTimes /> // just like we will do with any component
+        </h3>
+    See the x added to h3s 
+    (if it doesn't work, stop  and restart the server)
+    - To add style to the icon do
+        <FaTimes style={{ color: 'red', cursor: 'pointer' }} />
+35. To delete an item we can send a func as a prop then fire it off with a click
+    In App.js, above the return(), 
+        - create a func to delete task passing the id of the task to be deleted
+            const deleteTask = (id) => {
+                console.log('delete', id)
+            }
+        - then pass the func to Tasks onDelete in the return() statement
+            <Tasks tasks={tasks}
+                onDelete={deleteTask} //pass the func to onDelete
+            />
+        - In Tasks.js, pass onDelete as we passed 'tasks' (onDelete is a prop of Tasks)
+                const Tasks = ({ tasks, onDelete }) => {--}
+        - pass it to the <Task> in the return()
+             <Task key={task.id} task={task}
+                    onDelete={onDelete} / > 
+    - In Task.js, do the same
+        pass onDelete to the func
+            const Task = ({ task, onDelete }) => {--}
+        call it on a click
+            <FaTimes 
+                    style={{ color: 'red', cursor: 'pointer' }}
+                    onClick={onDelete} /> 
+    ## states get passed down / actions get passed up
+
+    Click the delete btn, see in console ; 'delete' and also the obj details cos thats what's being passed by default.
+
+36. To actually pass the deleted item id, 
+    -  we will call a func before the onDelete task id like this:
+
+      instead of onClick={onDelete}, we do
+            onClick={() => onDelete(task.id)}
+    A click calls the func which is in the App.js where we have access to the state
+    Click thru and see in console, the id of the item clicked
+37. TO ACTUALLY DELETE;
+    - delete the console log in App.js > deleteTask()
+    - replace that with/call setTasks() and filter thru the tasks that are already there
+        for all tasks, check that the id is not the same as the id we want to delete (cos we are delting that)
+            setTasks(tasks.filter((task) => task.id !== id))
+38. To show a message when every item has been deleted
+    - scroll down to the return()
+    - wrap Tasks in a {}, and add an if statement
+        {tasks.length > 0 ?  (   // if the length of tasks is greater than 0
+      <Tasks tasks={tasks}       // get the tasks
+      onDelete={deleteTask} //pass the func to onDelete
+       />
+       ) : ( // else
+         'No Tasks To Show' // show a msg
+         ) } 
+Note: if we reload everything we deleted will come back, it is jus a ui we are rendering. With a backend, an Api we fetch data from, this will be taken care of

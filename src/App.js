@@ -28,10 +28,22 @@ import Tasks from "./components/Tasks";
       }
       ]
     )
+
+    //Delete Task
+    const deleteTask = (id) => {
+      setTasks(tasks.filter((task) => task.id !== id))
+    }
+
   return (
      <div className="container">
       <Header />
-      <Tasks tasks={tasks} />
+    {tasks.length > 0 ?  (   // if the length of tasks is greater than 0
+      <Tasks tasks={tasks}  
+      onDelete={deleteTask} //pass the func to onDelete
+       />
+       ) : ( // else
+         'No Tasks To Show' // show a msg
+         ) } 
     </div> 
   );
 }
