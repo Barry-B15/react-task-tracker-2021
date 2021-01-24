@@ -2,7 +2,7 @@ Sources:
 Youtube:  https://youtu.be/w7ejDZ8SWv8
 GitHub: https://github.com/bradtraversy/react-crash-2021
 
-cont@30:45
+cont@40:21
 impt - to import PropTypes
 rafce - to auto gen func code w/=> func and export file
 shft+; open up emoji 
@@ -320,3 +320,132 @@ Now see the btn color change to green and the text change to Hello!
             onClick: PropTypes.func.isRequired (may do without the isRequired)
             }
 There are many kind of diff events that we can add, onSubmit, onDoubleClick ---
+24. STATE 👍
+    -  create a new component, Tasks.js
+    - rafce to auto build code
+    - remove the react import
+    - create a func 'tasks' above the component func and set it to an array []
+        const tasks = [ ]
+        # paste in 3 diff tasks
+            const tasks = [
+                {
+                    id: 1,
+                    text: 'Doctor Appointment',
+                    day: 'Feb 5th at 2:30pm',
+                    reminder: 'true',
+                },
+                {
+                    id: 2,
+                    text: 'Meeting at School',
+                    day: 'Feb 6th at 3:30pm',
+                    reminder: 'true',
+                },
+                {
+                    id: 3,
+                    text: 'Shopping for Food',
+                    day: 'Feb 7th at 5:30pm',
+                    reminder: 'false',
+                }
+            ]
+25. Loop thru the tasks
+    - we dont need a div so change the div in return() to fragment
+        <> </>
+    - map thru the list
+        <> 
+            {tasks.map((task) => (<h3>{task.text}</h3>)
+            )}
+        </> 
+        ie : for each task in tasks, take the h3 text
+26. Go to App.js to 
+    - import the Tasks.js 
+        import Tasks from "./components/Tasks";
+    - add the Task to the container just below <Header />
+        <Tasks />
+    Save and see that the h3 are displayed.
+    But there is a warning in console that each child in a list should have a unique id
+27. 👍:Fix UNIQUE ID warning
+    - Add a key to the h3 tag so:
+        <h3 key={task.id}> {task.text} </h3>
+    Save and refresh, see that the warning disappeared
+28. We don't need the array to be separate from our component,
+    we want it to be part of our state so 
+    - cut the array itself and 
+    - delete the const tasks = part
+    - to use state inside of a func we use a hook called useState
+        import { useState } from 'react'
+    - above the return(), def a new func tasks, and setTask (a func to update the state)
+        const [tasks, setTasks] = useState(
+            // paste the default array here
+            [
+                {
+                    id: 1,
+                    text: 'Doctor Appointment',
+                    day: 'Feb 5th at 2:30pm',
+                    reminder: 'true',
+                },
+                {
+                    id: 2,
+                    text: 'Meeting at School',
+                    day: 'Feb 6th at 3:30pm',
+                    reminder: 'true',
+                },
+                {
+                    id: 3,
+                    text: 'Shopping for Food',
+                    day: 'Feb 7th at 5:30pm',
+                    reminder: 'false',
+                }
+            ]
+        );
+    save and see that we have the same result, our state is now part of our component instead of coming from outside our component
+
+29. to change any part of the state, we will use setTasks
+    We cannot change state directly, we have to recreate and send it down so
+        tasks.push() in return() will not work
+    we will do
+        setTasks([ .... tasks, change it to Whatever ])
+
+30. we don't really want our task in the tasks component because we are going to need to access it from other components.
+    We can use the context API or Redux where we have a store that hovers over our UI where we can pull diff pieces fo state from. For this app, we are gonna put it in our App.js as a global state then we can pass it down to the components we want
+    - cut the useState import from Tasks.js
+    - paste it in App.js very top
+    - Also cut the whole declaration for [tasks, setTasks] in Tasks.js
+    - paste that in App.js as 1st child, above the return.
+        this is now a part of our component at an app level state
+
+    - now we can pass our tasks as a prop to <Tasks>
+        <Tasks tasks={tasks} />
+    - Go back to Tasks.js, destructure 
+        const Tasks = ({ tasks }) => {
+        //---
+        }
+    Now tasks is a part of our app components at the app level and can be access from other components. If we left it in Tasks.js, it will only be used by the component that we embed it in
+31. Instead of rendering just h3 for each task, lets have a separate task component
+    - create a Task.js in components
+    - rafce to populate it
+    - delete the react import
+    - add a class name and h3 to the div
+        <div className='task'>
+            <h3>My Task</h3>
+        </div>
+    In Tasks.js, import Task.js
+        import Task from './Task'
+    - Replace h3 with Task and edit the mapping to
+            {tasks.map((task) => ( 
+                <Task  // change h3 to task
+                key = { task.id } 
+                task={task}  //pass each task as a prop
+                 / > 
+                )) } 
+    See in browser, it displays My Task
+
+32. Display the tasks           
+    - Go to Task.js, to catch the task 
+    - destructure
+            const Task = ({ task }) => {
+                --}
+    - then in the return() , edit h3 to
+        <h3> { task.text} </h3>
+    save, we now get our tasks displays
+    - to get the day, add
+        <p> { task.day } </p>
