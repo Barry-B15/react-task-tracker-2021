@@ -2,7 +2,7 @@ Sources:
 Youtube:  https://youtu.be/w7ejDZ8SWv8
 GitHub: https://github.com/bradtraversy/react-crash-2021
 
-cont@40:21
+cont@40:21, 57:02
 impt - to import PropTypes
 rafce - to auto gen func code w/=> func and export file
 shft+; open up emoji 
@@ -517,3 +517,49 @@ There are many kind of diff events that we can add, onSubmit, onDoubleClick ---
          'No Tasks To Show' // show a msg
          ) } 
 Note: if we reload everything we deleted will come back, it is jus a ui we are rendering. With a backend, an Api we fetch data from, this will be taken care of
+
+39. create a toggle reminder func in App js
+        const toggleReminder = (id) => {
+            console.log(id)
+        }
+40. Pass it down in return() > <Tasks>
+        <Tasks tasks={tasks}  
+            onDelete={deleteTask} //pass the func to onDelete
+            onToggle={toggleReminder} // pass the toggle
+       />
+41. Also pass it in Tasks
+        - catch the prop
+            const Tasks = ({ tasks, onDelete, onToggle }) => {
+            }
+        - pass the prop
+            Task key = { task.id }
+                task = { task }
+                onDelete = { onDelete }
+                onToggle = { onToggle } // pass the prop
+             / > 
+42. Do the same in Task.js
+        - catch the prop
+            const Task = ({ tasks, onDelete, onToggle }) => {
+            }
+        - add onDoubleClick to the main div
+            <div className = 'task' onDoubleClick = {() =>
+             onToggle(task.id) } > // we used task.id as we r passing in task as a prop
+        Now double click to see the id shown in console
+43. We don't realy want to display the id, we want to toggle true to false or false to true
+    - delete the console.log fROM App.js
+    - we loop thru the map of tasks, if the id is sames as the id clicked,
+     we spread it across the task and change the remider from whatever the current is.
+        setTasks(
+        tasks.map((task) => 
+            task.id === id 
+            ? {...task, reminder 
+            : !task.reminder} 
+            : task)
+      )
+    Now if we open devtool > React component > Tasks and select a task
+    see the status of reminder true/false. If we DoubleClick it changes to the opposite. Let's show that on the page..
+    - In Task.js, remember our css class reminder adds a green border to the reminder that we set to true
+        # edit the return() > div > className = task
+            to
+            className={`task ${task.reminder ?
+            'reminder' : ''}`}

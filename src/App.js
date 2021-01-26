@@ -34,12 +34,23 @@ import Tasks from "./components/Tasks";
       setTasks(tasks.filter((task) => task.id !== id))
     }
 
+    // create toggle reminder
+    const toggleReminder = (id) => {
+      // console.log(id)
+      setTasks(
+        tasks.map((task) => 
+        task.id === id ? {...task, reminder : 
+          !task.reminder} : task)
+      )
+    }
+
   return (
      <div className="container">
       <Header />
     {tasks.length > 0 ?  (   // if the length of tasks is greater than 0
       <Tasks tasks={tasks}  
       onDelete={deleteTask} //pass the func to onDelete
+      onToggle={toggleReminder} // pass the toggle
        />
        ) : ( // else
          'No Tasks To Show' // show a msg
