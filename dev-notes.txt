@@ -563,3 +563,42 @@ Note: if we reload everything we deleted will come back, it is jus a ui we are r
             to
             className={`task ${task.reminder ?
             'reminder' : ''}`}
+
+44. ADD TASK COMPONENT
+    - iN component > create a addTask.js
+    - racfe to auto create boiler plate
+    - change the div to form as this will be a form and name the class add-form
+    - add a form control div into the form
+    - copy the form control and paste it twice
+    - change the type of the last one to  checkbox and remove the placeholder
+    - add another input with type, submit and value, Save Task
+45. Embed this into App.js
+        import AddTasks from "./components/AddTasks";
+    - ReactJust below Header in return(), add task
+        <AddTask />
+    - save and see the form added in the brownser
+    - open up console to see that we donthave any error
+46. Each input will have its own piece of state, component level state, not app level state
+    - import { useState } from 'react'
+    - right above return(), 
+        const [text, setText] = useState('')
+        const [day, setDay] = useState('')
+        const [reminder, setReminder] = useState(false)
+    - add the state to the inputs to receive whatever the user enters
+        value={text} onChange={(e) => setText(e.target.value)}
+        text:
+         <input type = "text" placeholder = 'Add Task'
+                    value={text} onChange={(e) => setText(e.target.value)}
+                     / >
+
+        Day & Time
+        <input type = "text" placeholder = 'Add Day and Time' 
+                    value={day} onChange={(e) => setDay(e.target.value)}/ >
+
+        checkbox checked
+        <input type = "checkbox"
+                    value={reminder} onChange={(e) => setReminder(e.currentTarget.checked)} / >
+                    for checkbox we set to currentTarget to see its checked or not
+    - Now open devtool > Components > AddTask > hooks
+        see the 3 states there > enter some text into the inputs and check the box and see the live update
+47. To submit this, we will need a func to handle that
