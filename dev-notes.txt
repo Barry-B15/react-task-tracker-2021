@@ -602,3 +602,40 @@ Note: if we reload everything we deleted will come back, it is jus a ui we are r
     - Now open devtool > Components > AddTask > hooks
         see the 3 states there > enter some text into the inputs and check the box and see the live update
 47. To submit this, we will need a func to handle that
+    - In App.js, create the func above the deleteTask()
+        const addTask = (task) => {
+            console.log(task)
+        }
+    - Pass this to <AddTask> in the return()
+        <AddTask onAdd={addTask} />
+    - In AddTask component, 
+        pass onAdd to the func AddTask
+            const AddTask = ({ onAdd }) => {}
+    - then add an onSubmit event to the form to watch for form submission
+        <form className='add-form' onSubmit={onSubmit} >
+    - def the onSubmit func above the return()
+        const onSubmit = (e) => {
+            e.preventDefault() // preventDefault so it does not submit to a page 
+
+            // add some form validation
+            // add the text, day, reminder data
+             // clear the form
+        }
+    - scroll to the checkbox input, add checked
+        checked={reminder}
+    Now when we submit, it will check if the text is there and raise an alert if its not there.
+    It will call onAdd() which will call addTask() which will console log as we have set it to do.
+    Open up console and test that this works
+    WORKED
+48. Instead of just console log, we want to add it to state
+        - delete the console log in addTask() in App.js
+        - replace with:
+            # const id=Math.floor(Math.random() * 10000) + 1 // since we are not using a backend that can add id, we generate a random
+            # console.log(id) // will show us the id
+        - use the id in a new task
+            const newTask = { id, ...task }
+        - set the tasks as an array and add the new task to it  
+            setTasks([...tasks, newTask])
+        Test run this in the browser, add some texts and save to see that we can save a new task.
+        WORKED
+49. Use the Add btn to toggle the form
