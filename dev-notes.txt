@@ -639,3 +639,42 @@ Note: if we reload everything we deleted will come back, it is jus a ui we are r
         Test run this in the browser, add some texts and save to see that we can save a new task.
         WORKED
 49. Use the Add btn to toggle the form
+    we need another piece of state in our App.js
+    - In App.js, inside the func declaration, create a boolean const showAddTask, set it to false by default
+        const [showAddTask, setShowAddTask] = useState(false)
+    - Our form will depend on this piece of state so
+        wrap the {<AddTask /> } with a curly
+        and add a turnery without an else
+            {showAddTask && <AddTask onAdd={addTask} /> }
+            if showAddTask is true then show the component
+    See in browser that the form is not showing
+    Change the state to true by default and see the form show up in the browser
+    We want the Add btn to do the toggling for us
+    That btn is in the Header component so:
+    - add setShowAddTask to the <Header>
+        <Header onAdd={() => setShowAddTask(!showAddTask)} />
+        set it to the opposite of what it is in showAddTask
+    - then go to Header.js, pass onAdd to the Header func
+        const Header = ({ title, onAdd })
+    - delete the onClick just below that
+    - change onClick in the <Button> to onAdd
+        <Button color = 'green'
+            text = 'Add'
+            onClick = { onAdd } />
+50. We will like the btn to change to Close or Add when toggled 
+    - Go to App.js > return(), add whatever the state of the showAddTask to the <Header>
+            <Header onAdd={() => setShowAddTask(!showAddTask)}  showAdd={showAddTask} / > 
+    - Then in Header.js,
+            const Header = ({ title, onAdd, showAdd }) => {---}
+    - And in the btn:
+        make the static color='green' and text = 'Add' into dynamic,
+        make it show differently depending on what's being shown
+            <Button color = {showAdd ? 'red' : 'green'}
+            text = {showAdd ? 'Close' : 'Add'}
+            onClick = { onAdd }
+            />
+    See the changes reflected in the browser. This is why react is awesome and there is nothing reloading, just responding to changes
+51. To deploy;
+    We just have to stop the server > run 
+        npm build
+    That creates a build folder. That 'build' folder is what we have to deploy

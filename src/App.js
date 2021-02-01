@@ -7,6 +7,9 @@ import AddTask from "./components/AddTask";
 
 // function  App() {
 const App = () => {
+    // state to toggle the Add btn
+    const [showAddTask, setShowAddTask] = useState(false)
+
     // declare a new func to set state
     const [tasks, setTasks] = useState(
         [{
@@ -56,8 +59,9 @@ const addTask = (task) => {
 
     return ( 
       <div className = "container" >
-        <Header / > 
-        <AddTask onAdd={addTask} />
+            <Header onAdd={() => setShowAddTask(!showAddTask)}  showAdd={showAddTask} / > 
+        
+            {showAddTask && <AddTask onAdd={addTask} />}
         {
             tasks.length > 0 ? ( // if the length of tasks is greater than 0
                 <Tasks tasks = { tasks }
