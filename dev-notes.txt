@@ -674,7 +674,114 @@ Note: if we reload everything we deleted will come back, it is jus a ui we are r
             onClick = { onAdd }
             />
     See the changes reflected in the browser. This is why react is awesome and there is nothing reloading, just responding to changes
-51. To deploy;
-    We just have to stop the server > run 
-        npm build
-    That creates a build folder. That 'build' folder is what we have to deploy
+51. DEPLOY, BUILD STATIC aSSET;
+    - stop the server > run 
+        npm run build
+    this creates an optimized production build in a folder called build. 
+    That 'build' folder is our static asset and is what we have to deploy if we want to deploy
+
+    - To try/serve this locally, install serve globally 
+        npm i -g serve
+    
+    - then serve the static build (this is just a basic http server)
+    serve the build server on port 8000 (type ff line in Terminal and go to port:8000 to see our app, port:3000 is our dev server)
+        serve -s build -p 8000
+
+    - Above (serve -s build -p8000) did not work
+        BUT
+            serve -s build 
+        WORKED, result as below
+
+        Serving!                                          │
+        │                                                 │
+        │   - Local:            http://localhost:5000     │
+        │   - On Your Network:  http://192.168.0.9:5000   |
+    
+    if we open React devtool we will see the app has the green mark and tells us
+    the app is running react production build
+    Now if we even delete everything in our app leaving only the build folder, 
+        the app will still work cos this is our production build
+
+52. JSON SERVER MOCK BACKEND 
+OUR BASIC APP FINISHED AT 50 AND WE DEPLOYED, THIS SECTION IS ABOUT ADDING A MOCK BACKEND
+    json server allows us to create a mock rest API of our own data
+    Link: https://github.com/typicode/json-server
+
+    - to use json server we neeed to 1st install it locally or global (let's install locally)
+            npm i json-server
+        check the package.json to see it's already added to our dependencies
+    - To run this we need to create a new Script in package.json
+        "Scripts" {
+            ------
+            "server": "json-server --watch db.json --port 5500" // run it a a preferred port (5500 for me )
+        }
+        this will run our server and pretend like a real backend rest Api
+    - now run
+            npm run server
+        this runs the server and creates a db.json
+        with some posts and comments
+    - Now run our react server in a new tap if not already running
+        npm start 
+    - The idea is to get data from the db.json into the app so
+        # change "posts" in db.json to "tasks" (thats what we've been working on)
+        # delete the "comments" and "profile" from dbJson
+        # delete the content of the now "tasks"
+        # cut the object from App.js const[tasks, setTasks] and paste inside d.json "tasks"
+        # our useState([]) is now empty and it should show "No Task To Show" in the browser
+        # now paste the object into db.json and 
+        # change it to json object by giving double " quotes to the keys and strings
+    Note: json server actually creates ids for us so we're not going to worry about creating ids
+    - See the json object in browser by adding /tasks to our url
+        http://localhost:5500/tasks
+53. To load this obj when the page loads we're going to use a hook called useEffect() which is used to create side effects and deal with side effects.
+Its used to handle what happen when the page loads
+    - In App.js import:
+            import { useState, useEffect } from "react";
+    - use/create the useEffect just below const [tasks, setTasks]
+            useEffect(() => {
+                const fetchTasks = async () => {
+                    const res = await fetch('http://localhost:5500/tasks')
+                    const data = await res.json()
+
+                    console.log(data);
+                }
+                fetchTasks() 
+            }, [here]<-- if we have something we want to run when this a runs
+                     we add it here in the [dependency array] and inside the useEffect((here))
+                    we dont have any now so we leave it blank
+            )
+    - See the object now showing in DevTool localhost:3000 (our react server, 5500 not working yet) as soon as the page loads
+54. We dont want the fetchTasks async inside our useEffect as we may want to use it elsewhere so 
+    - cut fetchTasks() from useEffect
+    - paste it just below useEffect
+    - *** add : 
+        return data 
+        instead of console.log() in useEffect() 
+        *** I missed this and the app crashed
+    - inside useEffect, create a new async getTasks func
+        const getTasks = async () => {
+            const tasksFromServer = await fetchTasks()
+            setTasks(tasksFromServer)
+        }
+        getTasks() // call getTasks() here instead of fetchTasks()
+
+55. In the video there was a warning: Each child must have unique id.
+    Mine was ok;
+    Fix was: In Tasks.js 
+        Add index to the map and change key = {task.id} to {index} as ff
+
+            tasks.map((task, index) => ( 
+                <Task key = {index} //instead of { task.id }
+                task = { task }
+                onDelete = { onDelete }
+                onToggle = { onToggle } // pass the prop
+                / > 
+    I didn't need to do this as mine was working
+
+    This line was giving error in localhost:5500 not in 3000, comment it out and everything is ok.
+    I read on Stackoverflow it's for the app to work offline, may be necessary for a functional all
+    another thread says the link has to be corrected in a config file which I don't have
+    https://stackoverflow.com/questions/53527972/cant-get-rid-of-missing-manifest-json-error
+
+    We are able to fetch our tasks from the backend, next we want to be able to display them
+    start @1:30:11

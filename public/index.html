@@ -9,7 +9,12 @@
     <meta name="description" content="Web site created using create-react-app" />
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
 
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <!-- This line was giving error, comment it out and everything is ok.
+    I read on Stackoverflow it's for the app to work offline, may be necessary for a functional all
+    another thread says the link has to be corrected in a config file which I don't have
+    https://stackoverflow.com/questions/53527972/cant-get-rid-of-missing-manifest-json-error
+    -->
+        <link rel="manifest" href="%PUBLIC_URL%/manifest.json" /> 
     <title>React Task Tracker App | 2021 React Crash Course</title>
 </head>
 
