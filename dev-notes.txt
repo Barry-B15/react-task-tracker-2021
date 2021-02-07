@@ -787,8 +787,103 @@ Its used to handle what happen when the page loads
     Until now when we refresh our delete comes back bes\casuse we havent deleted from athe server
     - Go to App.js > scroll down to where we have our deleteTask
     - make the func async
+        //const deleteTask = (id) => { changes the to:
+        const deleteTask = async (id) => { 
     - we dont need to save in a variable, we only need to await as we are not gettin any data back 
         await fetch(`http://localhost:5500/tasks/${id}`, {
             method: 'DELETE'
         })
     we just need to make a delete call before the filter 
+
+    Now save and delete an item then refresh the browser: It doesn't come back as before, GONE
+57. ADD TASKS 
+    - In App.js > scroll to the addTask func
+    We will not add an id as dbJson auto adds an id for us
+    - comment the old content
+    - make the func async
+        const addTask = async (task) => {
+    - add this code
+             const res = await fetch('http://localhost:5500/tasks', {
+                 // REQUEST
+                method: 'POST', // add a POST method since we are adding a post
+                headers: {     // add a content type to tell what type of content
+                    'Content-type': 'application/json'
+                },
+                body: JSON.stringify(task) // stringify to change the json data to string
+                // Note: we passed a (task) to the async func and that is what we must pass the the stringify(task) 
+            })
+            //RESPONSE 
+            const data = await res.json()
+            //SET TASKS
+            setTasks([...tasks, data])
+    nOW save > refresh and enter a task in the browser and check remider : works
+    delete > add a new task this time without a reminder : works too
+    SEE THE IT ALSO PERSISTS
+
+58. UPDATING THE REMINDER
+    IN App.js > 
+    - scroll to fetchTasks()
+    - copy fetchTasks and paste below it
+    - change the name to fetchTask, we need just one task, 
+        add an id to the async (id), 
+        and change the '' to `` in fetchTasks(` ... `)
+            const fetchTask = async (id) => {
+                const res = await fetch(`http://localhost:5500/tasks/${id}`)
+                const data = await res.json()
+
+                return data
+            }
+    - then go to toggleReminder to update
+        # make the func async
+            const toggleReminder = async (id) => {
+        # def the taskToToggle 
+                const taskToToggle = await fetchTask(id) // get the task to toggle into a variable
+                const updTask = { ...taskToToggle,  // ... spread across all taskToToggle,
+                    reminder: !taskToToggle.reminder }  //change the reminder to the opposite
+        # Response:
+                const res = await fetch(`http://localhost:5500/tasks/${id}`, { // await the fetch from the server
+            method: 'PUT',      // method is PUT cos its an update
+            headers: {          // add a header with the type of data
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify(updTask) //the data we r sending,  turn json data from the updTask into strings for display
+        })  
+        # const data = await res.json() // save the json data in a variable
+        # In setTasks, pass that var data to the reminder instead of task
+                reminder:
+                        // !task.reminder //change this to:
+                        data.reminder  // set the data to whatever the reminded
+    The new toggleReminder should look like This:
+        const toggleReminder = async (id) => {
+        const taskToToggle = await fetchTask(id)
+        const updTask = { ...taskToToggle,
+        reminder: !taskToToggle.reminder }
+
+        const res = await fetch(`http://localhost:5500/tasks/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify(updTask)
+        })
+
+        const data = await res.json()
+
+        // console.log(id)
+        setTasks(
+            tasks.map((task) =>
+                task.id === id ? {...task,
+                    reminder:
+                        // !task.reminder
+                        data.reminder
+                } : task)
+        )
+    }
+Now save > 
+double click any task and see it change. The green bar for reminder will appear or disappear based on what it was before
+> refresh and see that all changes persist 
+
+#### 
+THIS IS HOW TO UPDATE ANY OTHER FIELD IN OUR APP
+The only difference with a real app is we will be using an actual REST API in whatever language we choose
+ ####

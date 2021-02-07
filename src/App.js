@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Header from "./components/Header";
 import Tasks from "./components/Tasks";
 import AddTask from "./components/AddTask";
+import { wait } from "@testing-library/react";
 
 
 
@@ -31,13 +32,35 @@ const App = () => {
             // console.log(data);
             return data
         }
+    // Fetch Tasks
+    const fetchTask = async (id) => {
+        const res = await fetch(`http://localhost:5500/tasks/${id}`)
+        const data = await res.json()
+
+        return data
+    }
 
 // dd Task
-const addTask = (task) => {
+const addTask = async (task) => {
+    const res = await fetch('http://localhost:5500/tasks', {
+        //  REQUEST
+        method: 'POST',
+        headers: {
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify(task)
+    })
+
+    //RESPONSE 
+    const data = await res.json()
+    //SET TASKS
+    setTasks([...tasks, data])
+
     //console.log(task)
-    const id = Math.floor(Math.random() * 10000) + 1
-    const newTask = { id, ...task }
-    setTasks([...tasks, newTask])
+
+    // const id = Math.floor(Math.random() * 10000) + 1
+    // const newTask = { id, ...task }
+    // setTasks([...tasks, newTask])
 }
     //Delete Task
     //const deleteTask = (id) => {
@@ -51,13 +74,26 @@ const addTask = (task) => {
     }
 
     // create toggle reminder
-    const toggleReminder = (id) => {
+    const toggleReminder = async (id) => {
+        const taskToToggle = await fetchTask(id)
+        const updTask = { ...taskToToggle,
+        reminder: !taskToToggle.reminder }
+
+        const res = await fetch(`http://localhost:5500/tasks/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify(updTask)
+        })
+
+        const data = await res.json()
+
         // console.log(id)
         setTasks(
             tasks.map((task) =>
                 task.id === id ? {...task,
-                    reminder:
-                        !task.reminder
+                    reminder: data.reminder
                 } : task)
         )
     }
