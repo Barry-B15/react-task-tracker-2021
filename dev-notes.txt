@@ -687,8 +687,7 @@ Note: if we reload everything we deleted will come back, it is jus a ui we are r
     serve the build server on port 8000 (type ff line in Terminal and go to port:8000 to see our app, port:3000 is our dev server)
         serve -s build -p 8000
 
-    - Above (serve -s build -p8000) did not work
-        BUT
+    - We can also just let the server run on any available port
             serve -s build 
         WORKED, result as below
 
@@ -784,4 +783,12 @@ Its used to handle what happen when the page loads
     https://stackoverflow.com/questions/53527972/cant-get-rid-of-missing-manifest-json-error
 
     We are able to fetch our tasks from the backend, next we want to be able to display them
-    start @1:30:11
+56. DELETE from the server
+    Until now when we refresh our delete comes back bes\casuse we havent deleted from athe server
+    - Go to App.js > scroll down to where we have our deleteTask
+    - make the func async
+    - we dont need to save in a variable, we only need to await as we are not gettin any data back 
+        await fetch(`http://localhost:5500/tasks/${id}`, {
+            method: 'DELETE'
+        })
+    we just need to make a delete call before the filter 
