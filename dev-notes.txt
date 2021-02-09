@@ -2,10 +2,17 @@ Sources:
 Youtube:  https://youtu.be/w7ejDZ8SWv8
 GitHub: https://github.com/bradtraversy/react-crash-2021
 
-cont@40:21, 57:02
+NEXT ROUTE @1:39:19
+
 impt - to import PropTypes
 rafce - to auto gen func code w/=> func and export file
 shft+; open up emoji 
+
+HOW TO START THE APP AFTER THE BUILD @50
+i.   serve -s build (or serve -s build -p 8000 or a preferred port) // serve the SERVER build
+ii.  npm run server  // start the server
+iii. npm start      // start the app
+
 
 1. in shell or gitbash: 
     - npm --version   // check node version
@@ -887,3 +894,83 @@ double click any task and see it change. The green bar for reminder will appear 
 THIS IS HOW TO UPDATE ANY OTHER FIELD IN OUR APP
 The only difference with a real app is we will be using an actual REST API in whatever language we choose
  ####
+
+ 59.    ROUTING
+    - install react router
+        npm i react-router-dom 
+      see it added to our package.json
+
+ 59.1 We want to add a footer that will link to an ABOUT page
+        - In components, create a new Footer.js component
+        - In Footer.js, do rafce to create the component
+            and change div to footer
+                <footer >
+                    <p>Copyright &copy; 2021</p>
+                    <a href="/about">About</a>
+                </footer>
+        - Add this component to App.js
+                import Footer from "./components/Footer";
+        - embed in the return(), at the bottom
+                <Footer />
+           see it in the browser
+        - Now let's create the About component - About.js
+            add this few codes for now
+                <div >
+                    <h4>Version 1.0.0</h4>
+                    <a href="/">Go Back</a>
+                </div>
+        - Bring About.js into App.js
+            import About from './components/About'
+        # We can embed it as we have been doing but let's use router for this
+        - At the top, first import BrowserRouter, and Route 
+                import { BrowserRouter as Router, Route } from 'react-router-dom'
+        - To use a router we have to wrap everything in our output
+            so put <Router> around everything in the return()
+            return(
+                <Router>
+                //----
+                <Router/>
+            )
+        - Then use Route with a path to add the About page just above the Footer
+            return(
+                <Router>
+                    <div>
+                        //----
+                        <Route path='/about' component={About} />
+                        <Footer />
+                    </div>
+                <Router/>
+            )
+            save, go to browser > click About, it opens the About page in the 
+            app. click the Go Back link and it takes us back
+            We still see our other contents even in About cos they are embedded together, any Route we create we will still see the other things
+            We need that to change that
+            We have to add the showAddTask and the Tasks in an index Route
+            so we do
+                <Route path='/' exact render={(props) 
+                    => (
+                        <>
+                            cut and paste the "showAddTask and the Tasks" here
+                    </>
+                    )} />
+        Now when we click About, we don't see the other stuff anymore
+        Click Go Back and it takes us back to the index , we see the add as always and the tasks and our footer, cool.
+        
+60. When we click the links, we see the page reload.
+    We don't want that to happen, let's use a react-router-dom to link instead of a tag
+    - In About.js, import link from react-router-dom
+        import { Link } from 'react-router-dom'
+    - replace the a tag <a href='/'>Go Back</Link> with
+        <Link to="/">Go Back</Link>
+       (a becomes Link and href becomes to)
+    - Do the same in Footer
+        # import link
+        # use the link tag
+    Now notice that when we click the link, it doesn't reload, it just switches
+    When using Route be sure to use Link instead of a tag
+    We can create as many components as we want and link to them this way
+    We can also put multiple components with props as we did with this <Tasks> in App.js return <Route>
+
+ i. serve -s build (or serve -s build -p 8000 or a preferred port) // serve the SERVER build
+ ii. npm run server  // start the server
+ iii. npm start      // start the app

@@ -1,8 +1,12 @@
 import { useState, useEffect } from "react";
+import { BrowserRouter as Router, Route } from 'react-router-dom'
 import Header from "./components/Header";
+import Footer from "./components/Footer";
 import Tasks from "./components/Tasks";
 import AddTask from "./components/AddTask";
-import { wait } from "@testing-library/react";
+import About from './components/About';
+
+// import { wait } from "@testing-library/react";
 
 
 
@@ -99,29 +103,33 @@ const addTask = async (task) => {
     }
 
     return ( 
-      <div className = "container" >
-            <Header onAdd={() => setShowAddTask(!showAddTask)}  showAdd={showAddTask} / > 
-        
-            {showAddTask && <AddTask onAdd={addTask} />}
-        {
-            tasks.length > 0 ? 
-            ( // if the length of tasks is greater than 0
-                <Tasks tasks = { tasks }
-                onDelete = { deleteTask } //pass the func to onDelete
-                onToggle = { toggleReminder } // pass the toggle
-                />
-            ) : ( // else
-                'No Tasks To Show' // show a msg
-            )
-        } 
-        </div> 
+        <Router> 
+        <div className = "container" >
+                <Header onAdd={() => setShowAddTask(!showAddTask)}  showAdd={showAddTask} / > 
+                
+                <Route path='/' exact render={(props) => (
+                    <>
+                        {showAddTask && <AddTask onAdd={addTask} />}
+                {
+                    tasks.length > 0 ? 
+                    ( // if the length of tasks is greater than 0
+                        <Tasks tasks = { tasks }
+                        onDelete = { deleteTask } //pass the func to onDelete
+                        onToggle = { toggleReminder } // pass the toggle
+                        />
+                    ) : ( // else
+                        'No Tasks To Show' // show a msg
+                    )
+                } 
+                   </>
+                )} />
+
+                <Route path='/about' component={About} />
+
+                <Footer />
+           </div> 
+        </Router>
     );
 }
-
-// class App extends React.Component {
-//   render() {
-//     return <h1>Hello from Class</h1>
-//   }
-// }
 
 export default App;
