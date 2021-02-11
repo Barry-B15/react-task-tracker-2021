@@ -970,6 +970,25 @@ The only difference with a real app is we will be using an actual REST API in wh
     When using Route be sure to use Link instead of a tag
     We can create as many components as we want and link to them this way
     We can also put multiple components with props as we did with this <Tasks> in App.js return <Route>
+61. The Add button still shows everywhere, lets change that
+    - Go to Header.js > import useLocation from react-router-dom
+      this allows us to look at the route that we are currently on
+            import { useLocation } from 'react-router-dom'
+    - just above the return()
+      def the location func
+        const location = useLocation()
+    - get access to the location path name
+        wrap the <Button> in return() with a {} and add a conditional
+            {
+                location.pathname=== '/' && (  // tell the btn to show if the path is '/' (that is the index page)
+                    <Button>
+                        //----- old codes here
+                    </Button>
+                )
+            }
+    This way we can check the pathname and take actions accordingly
+    Now save and check the browser - the Add btn shows on the index page where it is needed to add new tasks but siezes to show on About where it is not needed
+
 
  i. serve -s build (or serve -s build -p 8000 or a preferred port) // serve the SERVER build
  ii. npm run server  // start the server
