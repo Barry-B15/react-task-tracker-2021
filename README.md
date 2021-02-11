@@ -1,3 +1,8 @@
+# Introduction
+This app allows users to set upcoming schedules with date, time and an optional reminder.
+I made this by following a Travesty Studio [Youtube video](https://youtu.be/w7ejDZ8SWv8). 
+Always grateful to Brad for his brilliant videos.
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
